@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import WebFont from 'webfontloader';
-import styled from 'styled-components';
 import GlobalStyles from './themes/global.style';
 import { useDispatch } from 'react-redux';
 import { getNowPlayingMovies } from './modules/movies';
@@ -13,6 +12,8 @@ import { getConfiguration } from '@/slices/configuration';
 import { MoviePage } from '@/modules/movies';
 import { TVPage } from '@/modules/tv';
 import { Navbar } from '@/components/Navbar';
+import { AnimatePresence } from 'framer-motion';
+import { MovieDetailsPage } from './modules/movies/components/MovieDetailsPage';
 
 /**
  *
@@ -32,8 +33,8 @@ function App() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		// dispatch(getNowPlayingMovies());
-		// dispatch(getConfiguration());
+		dispatch(getNowPlayingMovies());
+		dispatch(getConfiguration());
 		WebFont.load({
 			google: {
 				families: ['Roboto:300,400,600,700']
@@ -45,15 +46,20 @@ function App() {
 		<>
 			<GlobalStyles />
 			<Navbar/>
-			<Switch>
-				<Route exact path="/movies">
-					<MoviePage />
-				</Route>
-				<Route exact path="/tv">
-					<TVPage />
-				</Route>
-				<Redirect from="/" to="/movies" />
-			</Switch>
+			<AnimatePresence>
+				<Switch>
+					<Route exact path="/movies/:id">
+						<MovieDetailsPage />
+					</Route>
+					<Route exact path="/movies">
+						<MoviePage />
+					</Route>
+					<Route exact path="/tv">
+						<TVPage />
+					</Route>
+					<Redirect from="/" to="/movies" />
+				</Switch>
+			</AnimatePresence>
 		</>
 	);
 }

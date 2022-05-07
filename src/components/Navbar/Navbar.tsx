@@ -6,10 +6,10 @@ const Navbar = () => {
 	return (
 		<NavContainer>
 			<NavItems>
-				<StyledNavLink to="movies">
+				<StyledNavLink to="/movies">
                     Movies
 				</StyledNavLink>
-				<StyledNavLink to="tv">
+				<StyledNavLink to="/tv">
                     Tv
 				</StyledNavLink>
 			</NavItems>
