@@ -1,50 +1,21 @@
-import React, { useCallback, useMemo } from 'react';
-import { Carousel, CarouselSlide } from '@/components/Carousel';
-import { MovieDetailsCard } from '@/components/MovieDetailsCard';
+import React from 'react';
 import { Text } from '@/components/Text';
-import { useAppSelector } from '@/hooks/redux-hooks';
 import { AnimatedPage } from '@/components/AnimatedPage';
-import { useDispatch } from 'react-redux';
-import { getMovies } from '../../slices/movies';
+import { NowPlaying } from '../NowPlaying';
+import { MediaList } from '@/components/MediaList';
+import { useAppSelector } from '@/hooks/redux-hooks';
 
 export const MoviePage = () => {
-	const movies = useAppSelector((state) => state.movies.now_playing.movies);
-	const dispatch = useDispatch();
-
+	const {top_rated, popular, upcoming } = useAppSelector((state) => state.movies);
 	return (
 		<AnimatedPage>
-			<Text fontSize={20} fontWeight="bold" mx={'20px'}>
+			<Text fontSize={24} fontWeight="bold" mx={'40px'}>
 				Now Playing in theaters
 			</Text>
-			<Carousel
-				onScrollEnd={() => {
-					dispatch(getMovies('now_playing'));
-				}}
-			>
-				{movies.map(
-					({
-						id,
-						title,
-						backdrop_path,
-						release_date,
-						vote_average,
-						overview
-					}) => {
-						return (
-							<CarouselSlide key={id}>
-								<MovieDetailsCard
-									movieId={id}
-									title={title}
-									date={release_date}
-									votes={vote_average}
-									description={overview}
-									imgUrl={`https://image.tmdb.org/t/p/w780/${backdrop_path}`}
-								/>
-							</CarouselSlide>
-						);
-					}
-				)}
-			</Carousel>
+			<NowPlaying />
+			<MediaList list={top_rated.movies} title="Top Rated" movieKey="top_rated"/>
+			<MediaList list={upcoming.movies}  title="Upcoming" movieKey="upcoming"/>
+			<MediaList list={popular.movies}  title="Popular" movieKey="popular"/>
 		</AnimatedPage>
 	);
 };

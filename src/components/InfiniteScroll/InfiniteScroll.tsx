@@ -1,23 +1,28 @@
+import { motion, MotionProps } from 'framer-motion';
 import React from 'react';
 import styled from 'styled-components';
 
-export interface InfiniteScrollProps {
+export interface InfiniteScrollProps extends MotionProps {
     children: React.ReactNode;
     onScrollEnd: () => void;
 }
   
-const InfiniteScrollWrapper = styled.div`
+const InfiniteScrollWrapper = styled(motion.div)`
     overflow: inherit;
     display: inherit;
 `;
 
-export const InfiniteScroll = ({children, onScrollEnd}: InfiniteScrollProps) => {
+export const InfiniteScroll = ({children, onScrollEnd, ...props}: InfiniteScrollProps) => {
 	return (
-		<InfiniteScrollWrapper onScroll={(e: React.UIEvent<HTMLDivElement>) => {
-			const innerContainer = e.target as HTMLDivElement;
-			if (innerContainer.scrollLeft + innerContainer.clientWidth >= innerContainer.scrollWidth && onScrollEnd) {
-				onScrollEnd();
-			}
-		}} >{children}</InfiniteScrollWrapper>
+		<InfiniteScrollWrapper
+			{...props} 
+			onScroll={(e: React.UIEvent<HTMLDivElement>) => {
+				const innerContainer = e.target as HTMLDivElement;
+				if (innerContainer.scrollLeft + innerContainer.clientWidth >= innerContainer.scrollWidth && onScrollEnd) {
+					onScrollEnd();
+				}
+			}}>
+			{children}
+		</InfiniteScrollWrapper>
 	);
 };

@@ -15,7 +15,7 @@ const queryParams = {
 	page: 1
 };
 
-async function requestNotPlayingMovies(url: string, page: number) {
+async function requestMovies(url: string, page: number) {
 	const response = await fetch(
 		url + new URLSearchParams({ ...queryParams, page: page.toString() })
 	);
@@ -26,22 +26,20 @@ async function requestNotPlayingMovies(url: string, page: number) {
 function* fetchMovies({ payload }: PayloadAction<MovieKey>) {
 	try {
 		const currentPage: number = yield select(
-			(state) => state.movies.now_playing.page
+			(state) => state.movies[payload].page
 		);
-		const data: Movie[] = yield requestNotPlayingMovies(
+		console.log(payload, currentPage);
+		const data: Movie[] = yield requestMovies(
 			`${BASE_URL}/movie/${payload}?`,
 			currentPage
 		);
 		yield put(getMoviesSuccess({ movieKey: payload, movies: data }));
-		yield put(getNextPage());
+		yield put(getNextPage(payload));
 	} catch (error) {
 		console.log(error);
 	}
 }
 
 export function* movieSagas() {
-	yield all([
-		takeLatest(getMovies.type, fetchMovies),
-		takeEvery(getNextPage.type, getNextPage)
-	]);
+	yield all([takeEvery(getMovies.type, fetchMovies)]);
 }

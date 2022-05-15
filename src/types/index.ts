@@ -24,6 +24,7 @@ export type MoviesState = {
 	now_playing: CurrentMoviePage;
 	popular: CurrentMoviePage;
 	upcoming: CurrentMoviePage;
+	top_rated: CurrentMoviePage;
 };
 
 export type Configuration = {

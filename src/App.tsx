@@ -34,7 +34,11 @@ function App() {
 
 	useEffect(() => {
 		dispatch(getMovies('now_playing'));
+		dispatch(getMovies('popular'));
+		dispatch(getMovies('top_rated'));
+		dispatch(getMovies('upcoming'));
 
+	
 		dispatch(getConfiguration());
 		WebFont.load({
 			google: {

@@ -16,10 +16,15 @@ const initialState: MoviesState = {
 		movies: [],
 		page: 1,
 		isLoading: false
+	},
+	top_rated: {
+		movies: [],
+		page: 1,
+		isLoading: false
 	}
 };
 
-export type MovieKey = 'now_playing' | 'popular' | 'upcoming';
+export type MovieKey = 'now_playing' | 'popular' | 'upcoming' | 'top_rated';
 
 export type MoviePayload = {
 	movieKey: MovieKey;
@@ -43,8 +48,8 @@ const movieSlice = createSlice({
 		getMoviesError: (state, { payload }: PayloadAction<MovieKey>) => {
 			state[payload].isLoading = false;
 		},
-		getNextPage: (state) => {
-			state.now_playing.page += 1;
+		getNextPage: (state, { payload }: PayloadAction<MovieKey>) => {
+			state[payload].page += 1;
 		}
 	}
 });

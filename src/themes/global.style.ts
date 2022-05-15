@@ -19,6 +19,9 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  *::-webkit-scrollbar {
+		display: none;
+	}
 
   body {
     margin: 0;

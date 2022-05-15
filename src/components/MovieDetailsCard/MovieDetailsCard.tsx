@@ -2,11 +2,11 @@ import { motion } from 'framer-motion';
 import React from 'react';
 import { FaStar } from 'react-icons/fa';
 import styled from 'styled-components';
-import { Flex } from '../Flex';
-import Link from '../Link';
-import { Text } from '../Text';
+import { Flex } from '@/components/Flex';
+import { Link } from '@/components/Link';
+import { Text } from '@/components/Text';
 
-type MovieDetailsCardProps = {
+export type MovieDetailsCardProps = {
     imgUrl: string;
     title: string;
 	date: string;
@@ -18,7 +18,6 @@ type MovieDetailsCardProps = {
 const MovieDetailsCardWrapper = styled(motion.div)`
     display: flex;
 	margin: 20px;
-	cursor: pointer;
 `;
 
 const CardContent = React.memo(styled.div<{imgUrl: string}>`
@@ -39,8 +38,8 @@ const MovieDetails = styled(motion.div)`
 `;
 
 const MovieDetailsCardWithoutMemo = ({movieId, title, imgUrl, date, votes, description}: MovieDetailsCardProps) => {
-	const year = new Date(date).getFullYear();
-	
+	const year = date ? new Date(date).getFullYear() : '';
+
 	return (
 		<Link to={`/movies/${movieId}`}>
 			<MovieDetailsCardWrapper>
