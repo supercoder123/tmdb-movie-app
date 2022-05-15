@@ -1,19 +1,26 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Carousel, CarouselSlide } from '@/components/Carousel';
 import { MovieDetailsCard } from '@/components/MovieDetailsCard';
 import { Text } from '@/components/Text';
 import { useAppSelector } from '@/hooks/redux-hooks';
-import { PageWrapper } from '@/styles';
+import { AnimatedPage } from '@/components/AnimatedPage';
+import { useDispatch } from 'react-redux';
+import { getMovies } from '../../slices/movies';
 
 export const MoviePage = () => {
-	const movies = useAppSelector((state) => state.movies.nowPlaying.movies);
+	const movies = useAppSelector((state) => state.movies.now_playing.movies);
+	const dispatch = useDispatch();
 
 	return (
-		<PageWrapper>
+		<AnimatedPage>
 			<Text fontSize={20} fontWeight="bold" mx={'20px'}>
-				In theaters
+				Now Playing in theaters
 			</Text>
-			<Carousel>
+			<Carousel
+				onScrollEnd={() => {
+					dispatch(getMovies('now_playing'));
+				}}
+			>
 				{movies.map(
 					({
 						id,
@@ -38,6 +45,6 @@ export const MoviePage = () => {
 					}
 				)}
 			</Carousel>
-		</PageWrapper>
+		</AnimatedPage>
 	);
 };

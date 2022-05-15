@@ -1,9 +1,6 @@
-import { PageWrapper } from '@/styles';
 import React from 'react';
+import { AnimatedPage } from '@/components/AnimatedPage';
 
 export const TVPage = () => {
-	return (
-		<PageWrapper>TVPage</PageWrapper>
-	);
+	return <AnimatedPage>TVPage</AnimatedPage>;
 };
-

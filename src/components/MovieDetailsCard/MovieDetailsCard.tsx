@@ -21,23 +21,24 @@ const MovieDetailsCardWrapper = styled(motion.div)`
 	cursor: pointer;
 `;
 
-const CardContent = styled.div<{imgUrl: string}>`
+const CardContent = React.memo(styled.div<{imgUrl: string}>`
     display: flex;
     flex-direction: column;
 	background: linear-gradient(0deg,rgb(14 14 14),rgba(24,22,24,0.3)), url(${(props) => props.imgUrl});
-	background-position: center center;
+	background-position: top center;
 	background-repeat: no-repeat;
+	background-size: cover;
 	height: 250px;
 	width: 500px;
 	padding: 20px;
 	border-radius: 12px;
-`;
+`);
 
 const MovieDetails = styled(motion.div)`
 	margin-top: auto;
 `;
 
-export const MovieDetailsCard = ({movieId, title, imgUrl, date, votes, description}: MovieDetailsCardProps) => {
+const MovieDetailsCardWithoutMemo = ({movieId, title, imgUrl, date, votes, description}: MovieDetailsCardProps) => {
 	const year = new Date(date).getFullYear();
 	
 	return (
@@ -60,3 +61,5 @@ export const MovieDetailsCard = ({movieId, title, imgUrl, date, votes, descripti
 		</Link>
 	);
 };
+
+export const MovieDetailsCard = React.memo(MovieDetailsCardWithoutMemo);

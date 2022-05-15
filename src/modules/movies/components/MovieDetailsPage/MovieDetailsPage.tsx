@@ -1,7 +1,8 @@
+import { AnimatedPage } from '@/components/AnimatedPage';
 import React from 'react';
 
 export const MovieDetailsPage = () => {
 	return (
-		<div>MovieDetailsPage</div>
+		<AnimatedPage>MovieDetailsPage</AnimatedPage>
 	);
 };

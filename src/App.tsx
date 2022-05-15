@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import WebFont from 'webfontloader';
 import GlobalStyles from './themes/global.style';
 import { useDispatch } from 'react-redux';
-import { getNowPlayingMovies } from './modules/movies';
+import { getMovies } from './modules/movies';
 import {
 	Switch,
 	Route,
@@ -33,7 +33,8 @@ function App() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(getNowPlayingMovies());
+		dispatch(getMovies('now_playing'));
+
 		dispatch(getConfiguration());
 		WebFont.load({
 			google: {

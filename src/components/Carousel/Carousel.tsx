@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { InfiniteScroll, InfiniteScrollProps } from '../InfiniteScroll';
 
-type CarouselProps = {
+interface CarouselProps extends InfiniteScrollProps {
   children: React.ReactNode;
-};
+}
 
 const CarouselContainer = styled(motion.div)`
     width: 100%;
@@ -23,17 +24,10 @@ const CarouselInner = styled(motion.div)`
 `;
 
 
-export const Carousel = ({ children }: CarouselProps) => {
-	const ref = useRef<HTMLDivElement>(null);
-	const [width, setWidth] = useState(0);
-
-	useEffect(() => {
-		if (ref.current) {
-			setWidth(ref.current?.scrollWidth - ref.current?.clientWidth);
-		}
-	}, [ref.current]);
+export const Carousel = ({ children, onScrollEnd }: CarouselProps) => {
 
 	return (<CarouselContainer>
+		
 		<CarouselInner
 			// ref={ref}
 			// drag="x"
@@ -42,7 +36,9 @@ export const Carousel = ({ children }: CarouselProps) => {
 			// dragElastic={1}
 			// whileTap={{cursor: 'grabbing'}}
 		>
-			{children}
+			<InfiniteScroll onScrollEnd={onScrollEnd}>
+				{children}
+			</InfiniteScroll>
 		</CarouselInner>
 	</CarouselContainer>);
 };

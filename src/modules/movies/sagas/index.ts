@@ -1,35 +1,39 @@
 import { BASE_URL, API_KEY } from '@/config';
 import { Movie } from '@/types';
+import { PayloadAction } from '@reduxjs/toolkit';
 import { all, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import {
-	getNowPlayingMovies,
-	getNowPlayingMoviesSuccess,
-	getNowPlayingNextPage,
+	getMovies,
+	getMoviesSuccess,
+	getNextPage,
+	MovieKey
 } from '../slices/movies';
 
 const queryParams = {
 	api_key: API_KEY,
 	language: 'en',
-	page: 1,
+	page: 1
 };
 
-async function requestNotPlayingMovies(page: number) {
+async function requestNotPlayingMovies(url: string, page: number) {
 	const response = await fetch(
-		`${BASE_URL}/movie/now_playing?` +
-      new URLSearchParams({ ...queryParams, page: page.toString() })
+		url + new URLSearchParams({ ...queryParams, page: page.toString() })
 	);
 	const data = await response.json();
 	return data.results;
 }
 
-function* fetchNowPlayingMovies() {
+function* fetchMovies({ payload }: PayloadAction<MovieKey>) {
 	try {
 		const currentPage: number = yield select(
-			(state) => state.movies.nowPlaying.page
+			(state) => state.movies.now_playing.page
 		);
-		const data: Movie[] = yield requestNotPlayingMovies(currentPage);
-		yield put(getNowPlayingMoviesSuccess(data));
-		yield put(getNowPlayingNextPage());
+		const data: Movie[] = yield requestNotPlayingMovies(
+			`${BASE_URL}/movie/${payload}?`,
+			currentPage
+		);
+		yield put(getMoviesSuccess({ movieKey: payload, movies: data }));
+		yield put(getNextPage());
 	} catch (error) {
 		console.log(error);
 	}
@@ -37,7 +41,7 @@ function* fetchNowPlayingMovies() {
 
 export function* movieSagas() {
 	yield all([
-		takeLatest(getNowPlayingMovies.type, fetchNowPlayingMovies),
-		takeEvery(getNowPlayingNextPage.type, getNowPlayingNextPage),
+		takeLatest(getMovies.type, fetchMovies),
+		takeEvery(getNextPage.type, getNextPage)
 	]);
 }

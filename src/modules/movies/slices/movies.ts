@@ -2,53 +2,55 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MoviesState, Movie } from '@/types';
 
 const initialState: MoviesState = {
-	nowPlaying: {
+	now_playing: {
 		movies: [],
 		page: 1,
-		isLoading: false,
+		isLoading: false
 	},
 	popular: {
 		movies: [],
 		page: 1,
-		isLoading: false,
+		isLoading: false
 	},
 	upcoming: {
 		movies: [],
 		page: 1,
-		isLoading: false,
-	},
+		isLoading: false
+	}
+};
+
+export type MovieKey = 'now_playing' | 'popular' | 'upcoming';
+
+export type MoviePayload = {
+	movieKey: MovieKey;
+	movies: Array<Movie>;
 };
 
 const movieSlice = createSlice({
 	name: 'movies',
 	initialState,
 	reducers: {
-		getNowPlayingMovies: (state) => {
-			state.nowPlaying.isLoading = true;
+		getMovies: (state, { payload }: PayloadAction<MovieKey>) => {
+			state[payload].isLoading = true;
 		},
-		getNowPlayingMoviesSuccess: (
+		getMoviesSuccess: (
 			state,
-			{ payload }: PayloadAction<Array<Movie>>
+			{ payload: { movieKey, movies } }: PayloadAction<MoviePayload>
 		) => {
-			console.log(payload);
-			state.nowPlaying.movies = [...state.nowPlaying.movies, ...payload];
-			state.nowPlaying.isLoading = false;
+			state[movieKey].movies.push(...movies);
+			state[movieKey].isLoading = false;
 		},
-		getNowPlayingMoviesError: (state) => {
-			state.nowPlaying.isLoading = false;
+		getMoviesError: (state, { payload }: PayloadAction<MovieKey>) => {
+			state[payload].isLoading = false;
 		},
-		getNowPlayingNextPage: (state) => {
-			state.nowPlaying.page += 1;
-		},
-	},
+		getNextPage: (state) => {
+			state.now_playing.page += 1;
+		}
+	}
 });
 
-export const {
-	getNowPlayingMovies,
-	getNowPlayingMoviesSuccess,
-	getNowPlayingMoviesError,
-	getNowPlayingNextPage,
-} = movieSlice.actions;
+export const { getMovies, getMoviesSuccess, getMoviesError, getNextPage } =
+	movieSlice.actions;
 
 const movieReducer = movieSlice.reducer;
 export { movieReducer };
