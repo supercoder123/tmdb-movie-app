@@ -9,13 +9,12 @@ import {
 	MovieKey
 } from '../slices/movies';
 
-const queryParams = {
-	api_key: API_KEY,
-	language: 'en',
-	page: 1
-};
-
 async function requestMovies(url: string, page: number) {
+	const queryParams = {
+		api_key: API_KEY,
+		language: 'en',
+		page: 1
+	};
 	const response = await fetch(
 		url + new URLSearchParams({ ...queryParams, page: page.toString() })
 	);

@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { space, typography, color, TypographyProps, SpaceProps, ColorProps } from 'styled-system';
+import { space, typography, color, TypographyProps, SpaceProps, ColorProps, layout, LayoutProps } from 'styled-system';
 
-interface TextStyleProps extends TypographyProps, SpaceProps, ColorProps {
+interface TextStyleProps extends TypographyProps, SpaceProps, ColorProps, LayoutProps {
     children: string | number;
 	limit?: number;
     color?: string
@@ -14,7 +14,8 @@ const TextWrapper = styled('p')<TextStyleProps>(
 	},
 	space,
 	typography,
-	color
+	color,
+	layout
 );
 
 export const Text = ({

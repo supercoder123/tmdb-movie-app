@@ -22,6 +22,7 @@ const MediaListWrapper = styled.div`
 export const MediaList = ({ title, movieKey, list, ...props}: MediaListProps) => {
 	const dispatch = useAppDispatch();
 	const getPopularMovies = useCallback(() => dispatch(getMovies(movieKey)), []);
+	const movieConfig = useAppSelector(state => state.configuration.images);
 	console.log(title);
 	return (
 		<>
@@ -36,7 +37,7 @@ export const MediaList = ({ title, movieKey, list, ...props}: MediaListProps) =>
 							title,
 							poster_path,
 						}, i) => {
-							const imgUrl = `https://image.tmdb.org/t/p/w185/${poster_path}`;
+							const imgUrl = `${movieConfig.base_url}w185/${poster_path}`;
 							return (
 								<CarouselSlide  key={`${id}_${i}`}>
 									<MoviePosterCard

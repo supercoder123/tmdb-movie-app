@@ -9,7 +9,7 @@ export const MoviePage = () => {
 	const {top_rated, popular, upcoming } = useAppSelector((state) => state.movies);
 	return (
 		<AnimatedPage>
-			<Text fontSize={24} fontWeight="bold" mx={'40px'}>
+			<Text fontSize={24} fontWeight="bold" mx={'40px'} mt={80}>
 				Now Playing in theaters
 			</Text>
 			<NowPlaying />
