@@ -8,7 +8,7 @@ export const NavContainer = styled.div`
 	position: fixed;
 	top: 0;
 	width: 100%;
-	border: 1px solid white;
+	/* border: 1px solid white; */
 	z-index: 2;
 	background-color: ${({ theme }) => theme.body.background};
 `;

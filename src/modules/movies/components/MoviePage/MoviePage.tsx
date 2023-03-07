@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from '@/components/Text';
 import { AnimatedPage } from '@/components/AnimatedPage';
-import { NowPlaying } from '../NowPlaying';
+import { NowPlaying } from '@/modules/movies';
 import { MediaList } from '@/components/MediaList';
 import { useAppSelector } from '@/hooks/redux-hooks';
 

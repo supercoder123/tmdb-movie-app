@@ -50,7 +50,7 @@ function App() {
 	return (
 		<>
 			<GlobalStyles />
-			<Navbar/>
+			{/* <Navbar/> */}
 			<AnimatePresence>
 				<Switch>
 					<Route exact path="/movies/:id">

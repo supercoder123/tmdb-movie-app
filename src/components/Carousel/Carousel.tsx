@@ -23,8 +23,6 @@ const CarouselInner = styled(motion.div)`
 	}
 `;
 
-
-
 export const Carousel = ({ children, onScrollEnd }: CarouselProps) => {
 
 	return (

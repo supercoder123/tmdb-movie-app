@@ -1,18 +1,20 @@
 import { AnimatedPage } from '@/components/AnimatedPage';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { BASE_URL, API_KEY } from '@/config';
 import { Text } from '@/components/Text';
+import { GenreIcon } from '@/components/GenreIcon';
 import styled from 'styled-components';
 import { Flex } from '@/components/Flex';
 import { useAppSelector } from '@/hooks/redux-hooks';
 import { motion } from 'framer-motion';
+import { Loader } from '@/components/Loader';
 
 async function getMovieDetails(id: string) {
 	const queryParams = {
 		api_key: API_KEY,
 		language: 'en',
-		append_to_response:'watch/providers'
+		append_to_response:'watch/providers,credits'
 	};
 	const response = await fetch(
 		`${BASE_URL}/movie/${id}?${new URLSearchParams({ ...queryParams })}`
@@ -26,14 +28,22 @@ type Genre = {
 	name: string;
 }
 
+type Cast = {
+	name: string;
+	profile_path: string;
+}
+
 type MovieDetails = {
 	original_title: string;
 	backdrop_path: string;
 	overview: string;
 	homepage: string;
 	poster_path: string;
-	genres: Genre;
+	genres: Genre[];
 	'watch/providers': any;
+	credits: {
+		cast: Cast[]
+	}
 }
 
 const MovieDetailsContainer = styled(motion.div)`
@@ -50,6 +60,8 @@ const MovieDetailsContainer = styled(motion.div)`
 const Poster = styled.img`
 	border-radius: 12px;
 	height: 350px;
+	width: 230px;
+	background-color: gainsboro;
 	margin: 40px 0;
 `;
 
@@ -79,8 +91,35 @@ const MovieDetailsWrapper = styled.div`
 	overflow: hidden;
 `;
 
+const Cast = styled.div`
+	height: 80px;
+	width: 80px;
+	border-radius: 50%;
+	overflow: hidden;
+	background-color: gray;
+	flex-shrink: 0;
+
+	img {
+		height: 80px;
+		width: 80px;
+		object-fit: cover;
+    	object-position: center center;
+	}
+	
+`;
+
+const BackButton = styled.button`
+	margin-left: 40px;
+	font-size: 20px;
+	padding: 0;
+	border: 0;
+	color: white;
+	background-color: transparent;
+`;
+
 export const MovieDetailsPage = () => {
 	const { id } = useParams<{id: string}>();
+	const history = useHistory();
 	const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
 	const movieConfig = useAppSelector(state => state.configuration.images);
 
@@ -92,23 +131,51 @@ export const MovieDetailsPage = () => {
 		}
 		fetchMovies();
 	}, []);
-	console.log(movieDetails);
 	
 	if (!movieDetails) {
-		return <div>Loading</div>;
+		return <Loader />;
 	}
 
 	return (
 		<AnimatedPage>
+			<BackButton onClick={() => {
+				history.goBack();
+			}}>Back</BackButton>
 			<MovieDetailsWrapper>
 				<Backdrop initial={{x: 50}} animate={{x: 0}} exit={{x: 50}} src={`${movieConfig.base_url}original/${movieDetails.backdrop_path}`} alt="background" />
-				<MovieDetailsContainer initial={{x: -20}} animate={{x: 0}} exit={{x: -20}}>
+				<MovieDetailsContainer initial={{x: -20, opacity: 0}} animate={{x: 0, opacity: 1}} exit={{x: -20, opacity: 0}}>
 					<MovieInfo>
 						<Flex>
 							<Poster src={`${movieConfig.base_url}w500/${movieDetails.poster_path}`} alt="Poster" />
-							<Flex margin={40} flexDirection="column">
+							<Flex margin={40} flexDirection="column" maxWidth={'70%'}>
 								<Text fontWeight="bold" fontSize={50}>{movieDetails.original_title}</Text>
-								<Text marginTop={10} fontSize={20} color={'#d8d9d9'}>{movieDetails.overview}</Text>
+								<Text marginTop={10} fontSize={20} color={'#d8d9d9'} minHeight={200}>{movieDetails.overview}</Text>
+								<Text my={10} fontSize={20} fontWeight="bold" color={'#d8d9d9'}>Genre</Text>
+								<Flex maxWidth={'50%'}>
+									{
+										movieDetails.genres.map((genre, i) => {
+											return <GenreIcon key={i} genreId={genre.id} />;
+										})
+									}
+								</Flex>						
+								<Text mt={30} mb={20} fontSize={20} fontWeight="bold" color={'#d8d9d9'}>The Cast</Text>
+								<Flex width={'100%'} overflow="scroll">
+									{ 
+										movieDetails.credits.cast.map((cast, i) => {
+											if (!cast.profile_path) {
+												return null;
+											}
+											return (
+												<Flex key={i} flexDirection="column" mx={20} alignItems="center">
+													<Cast> 
+														<img title={cast.name} src={`${movieConfig.base_url}w185${cast.profile_path}`} alt="Cast Image" />
+													</Cast>
+													<Text textAlign="center" mt={10} color={'#d8d9d9'}>{cast.name}</Text>
+												</Flex>
+											);
+										})
+									}
+								</Flex>
 							</Flex>
 						</Flex>
 					</MovieInfo>
