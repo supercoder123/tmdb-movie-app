@@ -23,7 +23,7 @@ export const MediaList = ({ title, movieKey, list, ...props}: MediaListProps) =>
 	const dispatch = useAppDispatch();
 	const getPopularMovies = useCallback(() => dispatch(getMovies(movieKey)), []);
 	const movieConfig = useAppSelector(state => state.configuration.images);
-	console.log(title);
+
 	return (
 		<>
 			<Text fontSize={24} fontWeight="bold" mx={'40px'}>

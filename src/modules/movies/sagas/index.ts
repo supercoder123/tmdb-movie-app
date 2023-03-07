@@ -27,7 +27,6 @@ function* fetchMovies({ payload }: PayloadAction<MovieKey>) {
 		const currentPage: number = yield select(
 			(state) => state.movies[payload].page
 		);
-		console.log(payload, currentPage);
 		const data: Movie[] = yield requestMovies(
 			`${BASE_URL}/movie/${payload}?`,
 			currentPage
